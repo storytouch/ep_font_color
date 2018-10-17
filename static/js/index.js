@@ -3,9 +3,7 @@ var _ = require('ep_etherpad-lite/static/js/underscore');
 var cssFiles = ['ep_font_color/static/css/color.css'];
 
 var api = require('./api');
-
-var FONT_COLOR_ATTRIB_KEY = 'font-color';
-var BLACK_COLOR = 'A0';
+var utils = require('./utils');
 
 exports.postAceInit = function(hook, context) {
   api.init(context.ace);
@@ -16,8 +14,8 @@ exports.aceAttribsToClasses = function(hook, context) {
   var value = context.value;
 
   // black color is the same as not applying color
-  if (key === FONT_COLOR_ATTRIB_KEY && value !== BLACK_COLOR) {
-    return [FONT_COLOR_ATTRIB_KEY + '-' + value];
+  if (key === utils.FONT_COLOR_ATTRIB_KEY && value !== utils.BLACK_COLOR) {
+    return [utils.FONT_COLOR_ATTRIB_KEY + '-' + value];
   }
 };
 
@@ -28,7 +26,7 @@ function doInsertColors(colorName) {
     return;
   }
 
-  var new_color = [FONT_COLOR_ATTRIB_KEY, colorName]; // e.g. [ 'font-color' , 'A1' ]
+  var new_color = [utils.FONT_COLOR_ATTRIB_KEY, colorName]; // e.g. [ 'font-color' , 'A1' ]
   documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [new_color]);
 }
 
