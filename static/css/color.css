@@ -1,3 +1,5 @@
+/* use a different class to mark errors on pad, but works just like A1 (red) */
+.font-color-ERROR,
 .font-color-A1  { color: #FF0000; }
 .font-color-A2  { color: #FF7E00; }
 .font-color-A3  { color: #FFCC00; }
