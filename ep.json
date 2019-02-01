@@ -5,7 +5,7 @@
       "client_hooks": {
         "postAceInit": "ep_font_color/static/js/index",
         "aceInitialized": "ep_font_color/static/js/index",
-        "aceEditorCSS": "ep_font_color/static/js/index",
+        "aceEditorCSS": "ep_font_color/static/js/aceEditorCSS",
         "aceAttribsToClasses": "ep_font_color/static/js/index",
         "collectContentPre": "ep_font_color/static/js/shared"
       },

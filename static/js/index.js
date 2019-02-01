@@ -1,6 +1,5 @@
 var $ = require('ep_etherpad-lite/static/js/rjquery').$;
 var _ = require('ep_etherpad-lite/static/js/underscore');
-var cssFiles = ['ep_font_color/static/css/color.css'];
 
 var api = require('./api');
 var utils = require('./utils');
@@ -34,8 +33,4 @@ function doInsertColors(colorName) {
 exports.aceInitialized = function(hook, context) {
   var editorInfo = context.editorInfo;
   editorInfo.ace_doInsertColors = _(doInsertColors).bind(context);
-};
-
-exports.aceEditorCSS = function() {
-  return cssFiles;
 };
