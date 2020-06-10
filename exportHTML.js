@@ -16,7 +16,7 @@ function findAllColorUsedOn(pad) {
   var colors_used = [];
 
   pad.pool.eachAttrib(function(key, value){
-    if (key === "color") {
+    if (key === "font-color" && value != "A0") { // skip black (A0) color
       colors_used.push(value);
     }
   });
@@ -27,7 +27,7 @@ function findAllColorUsedOn(pad) {
 // Transforms an array of color names into color tags like ["color", "red"]
 function transformColorsIntoTags(color_names) {
   return _.map(color_names, function(color_name) {
-    return ["color", color_name];
+    return ["font-color", color_name];
   });
 }
 
@@ -55,5 +55,5 @@ function rewriteLine(context){
 
 // Change from <span data-color:x  to <span class:color:x
 function replaceDataByClass(text) {
-  return text.replace(/data-color=["|']([0-9a-zA-Z]+)["|']/gi, "class='color:$1'");
+  return text.replace(/data-font-color=["|']([0-9a-zA-Z]+)["|']/gi, "class='font-color-$1'");
 }
