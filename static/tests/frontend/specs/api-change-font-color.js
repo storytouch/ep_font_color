@@ -126,7 +126,7 @@ ep_font_color_helper.changeFontColor = {
     A2: '#FF7E00',
     A3: '#FFCC00',
   },
-  defaultFontColor: '#000000', // black
+  defaultFontColor: '#3E3E3E', // grayish
   convertRgbToHex: function(rgb) {
     // copied from https://stackoverflow.com/a/3627747
     rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
