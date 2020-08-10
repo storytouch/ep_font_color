@@ -1,5 +1,6 @@
 var $ = require('ep_etherpad-lite/static/js/rjquery').$;
 var _ = require('ep_etherpad-lite/static/js/underscore');
+var authorsColorsUtils = require('./authorsColorsUtils');
 
 var api = require('./api');
 var utils = require('./utils');
@@ -32,5 +33,7 @@ function doInsertColors(colorName) {
 // Once ace is initialized, we set ace_doInsertColors and bind it to the context
 exports.aceInitialized = function(hook, context) {
   var editorInfo = context.editorInfo;
+  var thisPlugin = utils.getPluginProps();
+  thisPlugin.authorsColors = authorsColorsUtils.init(editorInfo);
   editorInfo.ace_doInsertColors = _(doInsertColors).bind(context);
 };

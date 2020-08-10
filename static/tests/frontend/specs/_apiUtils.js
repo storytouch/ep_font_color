@@ -2,6 +2,8 @@ var ep_font_color_helper_test = ep_font_color_helper_test || {};
 ep_font_color_helper_test.apiUtils = {
   /**** general helper methods to handle API calls ****/
   SET_SCRIPT_TEXT_FONT_COLOR: 'set_script_text_font_color',
+  TOGGLE_AUTHOR_COLOR: 'toggle_author_color',
+  SET_USERS_COLORS: 'caret-set_users_colors',
   lastDataSent: {},
 
   startListeningToApiEvents: function() {
@@ -42,5 +44,24 @@ ep_font_color_helper_test.apiUtils = {
     var target = helper.padChrome$.window;
     target.postMessage(message, '*');
   },
+
+  simulateToggleOfAuthorsColors: function() {
+    var message = {
+      type: this.TOGGLE_AUTHOR_COLOR,
+    };
+
+    var target = helper.padChrome$.window;
+    target.postMessage(message, '*');
+  },
+
+  simulateCallToSetUsersColors: function(usersColors) {
+    var message = {
+      type: this.SET_USERS_COLORS,
+      usersColors: usersColors,
+    }
+
+    var target = helper.padChrome$.window;
+    target.postMessage(message, '*');
+  }
 }
 
