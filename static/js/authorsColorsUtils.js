@@ -1,15 +1,17 @@
 var colorUtils = require('ep_cursortrace/static/js/colors');
 
 var authorsColorsUtils = function(editorInfo) {
+  this.usersColors = {};
   this.editorInfo = editorInfo;
   // it loads the script always with the authors colors disabled
   this.toggleAuthorsColors(false);
 }
 
 authorsColorsUtils.prototype.setUsersColors = function(usersColors) {
+  this.usersColors = usersColors;
   var self = this;
-  var authors = Object.keys(usersColors);
-  authors.forEach(function(authorId) {
+  var authorsId = Object.keys(usersColors);
+  authorsId.forEach(function(authorId) {
     var bgcolor = colorUtils.getColorHash(usersColors[authorId], 0.3);
     self.editorInfo.ace_setAuthorInfo(authorId, { bgcolor: bgcolor });
   })

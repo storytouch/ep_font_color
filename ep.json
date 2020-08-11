@@ -7,7 +7,8 @@
         "aceInitialized": "ep_font_color/static/js/index",
         "aceEditorCSS": "ep_font_color/static/js/aceEditorCSS",
         "aceAttribsToClasses": "ep_font_color/static/js/index",
-        "collectContentPre": "ep_font_color/static/js/shared"
+        "collectContentPre": "ep_font_color/static/js/shared",
+        "aceSetAuthorStyle" : "ep_font_color/static/js/index"
       },
       "hooks": {
         "collectContentPre": "ep_font_color/static/js/shared",
