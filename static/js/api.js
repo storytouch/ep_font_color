@@ -5,6 +5,8 @@ var TOGGLE_AUTHOR_COLOR = 'toggle_author_color';
 // this information is used to toggle the authors colors
 // when the TOGGLE_AUTHOR_COLOR event is received;
 var SET_USERS_COLORS = 'caret-set_users_colors';
+var GET_USERS_COLORS = 'get_users_colors';
+var ETHERPAD_RECONNECTED = 'etherpad_reconnected';
 
 var utils = require('./utils');
 
@@ -34,6 +36,11 @@ var _handleOutboundCalls = function _handleOutboundCalls(e, ace) {
       authorsColors.setUsersColors(e.data.usersColors);
       break;
     }
+
+    case ETHERPAD_RECONNECTED: {
+      _triggerEvent({ type: GET_USERS_COLORS });
+      break;
+    }
   }
 };
 
@@ -46,3 +53,9 @@ var _applyColorOnSelection = function(ace, colorName) {
     true
   );
 };
+
+var _triggerEvent = function _triggerEvent(message) {
+  // if there's a wrapper to Etherpad, send data to it; otherwise use Etherpad own window
+  var target = window.parent ? window.parent : window;
+  target.postMessage(message, '*');
+}
