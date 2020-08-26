@@ -4,6 +4,9 @@ ep_font_color_helper_test.apiUtils = {
   SET_SCRIPT_TEXT_FONT_COLOR: 'set_script_text_font_color',
   TOGGLE_AUTHOR_COLOR: 'toggle_author_color',
   SET_USERS_COLORS: 'caret-set_users_colors',
+  GET_USERS_COLORS: 'get_users_colors',
+  ETHERPAD_RECONNECTED: 'etherpad_reconnected',
+
   lastDataSent: {},
 
   startListeningToApiEvents: function() {
@@ -11,7 +14,10 @@ ep_font_color_helper_test.apiUtils = {
     this.resetLastDataSent();
     var outboundApiEventsTarget = helper.padChrome$.window.parent;
     outboundApiEventsTarget.addEventListener('message', function(e) {
-      if(e.data.type === self.SET_SCRIPT_TEXT_FONT_COLOR) {
+      if (
+        e.data.type === self.SET_SCRIPT_TEXT_FONT_COLOR ||
+        e.data.type === self.GET_USERS_COLORS
+      ) {
         self.lastDataSent[e.data.type] = e.data;
       }
     });
@@ -25,7 +31,7 @@ ep_font_color_helper_test.apiUtils = {
   },
 
   resetLastDataSent: function() {
-    this.lastDataSent = undefined;
+    this.lastDataSent = {};
   },
 
   /*
@@ -58,6 +64,15 @@ ep_font_color_helper_test.apiUtils = {
     var message = {
       type: this.SET_USERS_COLORS,
       usersColors: usersColors,
+    }
+
+    var target = helper.padChrome$.window;
+    target.postMessage(message, '*');
+  },
+
+  simulateCallToReconnectEtherpad: function() {
+    var message = {
+      type: this.ETHERPAD_RECONNECTED,
     }
 
     var target = helper.padChrome$.window;

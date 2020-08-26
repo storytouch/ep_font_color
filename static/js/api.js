@@ -5,57 +5,76 @@ var TOGGLE_AUTHOR_COLOR = 'toggle_author_color';
 // this information is used to toggle the authors colors
 // when the TOGGLE_AUTHOR_COLOR event is received;
 var SET_USERS_COLORS = 'caret-set_users_colors';
-var GET_USERS_COLORS = 'get_users_colors';
 var ETHERPAD_RECONNECTED = 'etherpad_reconnected';
 
 var utils = require('./utils');
 
-exports.init = function(ace) {
+var fontColorApi = function(ace) {
+  this.onApplyColorOnSelection = function() {};
+  this.onSetUsersColors = function() {};
+  this.onToggleAuthorsColors = function() {};
+  this.onEditorReconnected = [];
+
+  var self = this;
+
   // listen to outbound calls of this API
   window.addEventListener('message', function(e) {
-    _handleOutboundCalls(e, ace);
+    self._handleOutboundCalls(e, ace);
   });
-};
+}
 
-var _handleOutboundCalls = function _handleOutboundCalls(e, ace) {
+fontColorApi.prototype._handleOutboundCalls = function(e, ace) {
   var authorsColors = utils.getPluginProps().authorsColors;
 
   switch (e.data.type) {
     case SET_SCRIPT_TEXT_FONT_COLOR: {
       var colorName = e.data.colorName;
-      _applyColorOnSelection(ace, colorName);
+      this.onApplyColorOnSelection(colorName);
       break;
     }
 
     case TOGGLE_AUTHOR_COLOR: {
-      authorsColors.toggleAuthorsColors();
+      this.onToggleAuthorsColors();
       break;
     }
 
     case SET_USERS_COLORS: {
-      authorsColors.setUsersColors(e.data.usersColors);
+      var usersColors = e.data.usersColors;
+      this.onSetUsersColors(usersColors);
       break;
     }
 
     case ETHERPAD_RECONNECTED: {
-      _triggerEvent({ type: GET_USERS_COLORS });
+      this.onEditorReconnected.forEach(function(fn) {
+        fn();
+      });
       break;
     }
   }
 };
 
-var _applyColorOnSelection = function(ace, colorName) {
-  ace.callWithAce(
-    function(ace) {
-      ace.ace_doInsertColors(colorName);
-    },
-    'insertColor',
-    true
-  );
-};
+fontColorApi.prototype.setHandleApplyColor = function(fn) {
+  this.onApplyColorOnSelection = fn;
+}
 
-var _triggerEvent = function _triggerEvent(message) {
+fontColorApi.prototype.setHandleSetUsersColors = function(fn) {
+  this.onSetUsersColors = fn;
+}
+
+fontColorApi.prototype.setHandleToggleAuthorsColors = function(fn) {
+  this.onToggleAuthorsColors = fn;
+}
+
+fontColorApi.prototype.setHandleEditorReconnected = function(fn) {
+  this.onEditorReconnected.push(fn);
+}
+
+fontColorApi.prototype.triggerEvent = function(message) {
   // if there's a wrapper to Etherpad, send data to it; otherwise use Etherpad own window
   var target = window.parent ? window.parent : window;
   target.postMessage(message, '*');
 }
+
+exports.init = function(ace) {
+  return new fontColorApi(ace);
+};

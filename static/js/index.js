@@ -6,10 +6,6 @@ var colorUtils = require('ep_cursortrace/static/js/colors');
 var api = require('./api');
 var utils = require('./utils');
 
-exports.postAceInit = function(hook, context) {
-  api.init(context.ace);
-};
-
 exports.aceAttribsToClasses = function(hook, context) {
   var key = context.key;
   var value = context.value;
@@ -34,8 +30,10 @@ function doInsertColors(colorName) {
 // Once ace is initialized, we set ace_doInsertColors and bind it to the context
 exports.aceInitialized = function(hook, context) {
   var editorInfo = context.editorInfo;
+  var ace = context.ace;
   var thisPlugin = utils.getPluginProps();
-  thisPlugin.authorsColors = authorsColorsUtils.init(editorInfo);
+  thisPlugin.api = api.init(ace);
+  thisPlugin.authorsColors = authorsColorsUtils.init(editorInfo, ace);
   editorInfo.ace_doInsertColors = _(doInsertColors).bind(context);
 };
 

@@ -25,6 +25,7 @@ describe('ep_font_color - toggle authors colors', function() {
     apiUtils = ep_font_color_helper_test.apiUtils;
 
     helper.newPad(function() {
+      apiUtils.startListeningToApiEvents();
       helper.padInner$('div').last().sendkeys('user1');
       originalUser = getUserId();
 
@@ -72,4 +73,15 @@ describe('ep_font_color - toggle authors colors', function() {
       testColors(A8_COLOR, B14_COLOR, done);
     });
   });
+
+  context('when etherpad is reconnected', function() {
+    before(function(done) {
+      apiUtils.simulateCallToReconnectEtherpad();
+      done();
+    })
+
+    it('sends a message to get the users colors', function(done) {
+      apiUtils.waitForDataToBeSent('get_users_colors', done);
+    })
+  })
 });
