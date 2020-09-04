@@ -3,10 +3,12 @@ var utils = require('./utils');
 
 var GET_USERS_COLORS = 'get_users_colors';
 
-var authorsColorsUtils = function(editorInfo, ace) {
+var authorsColorsUtils = function(context) {
   this.usersColors = {};
-  this.editorInfo = editorInfo;
-  this.ace = ace;
+  this.editorInfo = context.editorInfo;
+  this.rep = context.rep;
+  this.documentAttributeManager = context.documentAttributeManager;
+
   // it loads the script always with the authors colors disabled
   this.toggleAuthorsColors(false);
 
@@ -19,13 +21,16 @@ var authorsColorsUtils = function(editorInfo, ace) {
 }
 
 authorsColorsUtils.prototype.applyColorOnSelection = function(colorName) {
-  this.ace.callWithAce(
-    function(ace) {
-      ace.ace_doInsertColors(colorName);
-    },
-    'insertColor',
-    true
-  );
+  var rep = this.rep;
+  var documentAttributeManager = this.documentAttributeManager;
+  if (!(rep.selStart && rep.selEnd) || colorName === undefined) {
+    return;
+  }
+
+  var new_color = [utils.FONT_COLOR_ATTRIB_KEY, colorName]; // e.g. [ 'font-color' , 'A1' ]
+  this.editorInfo.ace_inCallStackIfNecessary('applyFontColor', function() {
+    documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [new_color]);
+  })
 }
 
 authorsColorsUtils.prototype.setUsersColors = function(usersColors) {
@@ -52,6 +57,6 @@ authorsColorsUtils.prototype.toggleAuthorsColors = function(activate) {
   $colorsCheck.prop("checked", showAuthorColors);
 }
 
-exports.init = function(editorInfo) {
-  return new authorsColorsUtils(editorInfo);
+exports.init = function(context) {
+  return new authorsColorsUtils(context);
 }

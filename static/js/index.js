@@ -16,25 +16,11 @@ exports.aceAttribsToClasses = function(hook, context) {
   }
 };
 
-function doInsertColors(colorName) {
-  var rep = this.rep;
-  var documentAttributeManager = this.documentAttributeManager;
-  if (!(rep.selStart && rep.selEnd) || colorName === undefined) {
-    return;
-  }
-
-  var new_color = [utils.FONT_COLOR_ATTRIB_KEY, colorName]; // e.g. [ 'font-color' , 'A1' ]
-  documentAttributeManager.setAttributesOnRange(rep.selStart, rep.selEnd, [new_color]);
-}
-
-// Once ace is initialized, we set ace_doInsertColors and bind it to the context
 exports.aceInitialized = function(hook, context) {
   var editorInfo = context.editorInfo;
-  var ace = context.ace;
   var thisPlugin = utils.getPluginProps();
-  thisPlugin.api = api.init(ace);
-  thisPlugin.authorsColors = authorsColorsUtils.init(editorInfo, ace);
-  editorInfo.ace_doInsertColors = _(doInsertColors).bind(context);
+  thisPlugin.api = api.init();
+  thisPlugin.authorsColors = authorsColorsUtils.init(context);
 };
 
 /*

@@ -9,7 +9,7 @@ var ETHERPAD_RECONNECTED = 'etherpad_reconnected';
 
 var utils = require('./utils');
 
-var fontColorApi = function(ace) {
+var fontColorApi = function() {
   this.onApplyColorOnSelection = function() {};
   this.onSetUsersColors = function() {};
   this.onToggleAuthorsColors = function() {};
@@ -19,11 +19,11 @@ var fontColorApi = function(ace) {
 
   // listen to outbound calls of this API
   window.addEventListener('message', function(e) {
-    self._handleOutboundCalls(e, ace);
+    self._handleOutboundCalls(e);
   });
 }
 
-fontColorApi.prototype._handleOutboundCalls = function(e, ace) {
+fontColorApi.prototype._handleOutboundCalls = function(e) {
   var authorsColors = utils.getPluginProps().authorsColors;
 
   switch (e.data.type) {
@@ -75,6 +75,6 @@ fontColorApi.prototype.triggerEvent = function(message) {
   target.postMessage(message, '*');
 }
 
-exports.init = function(ace) {
-  return new fontColorApi(ace);
+exports.init = function() {
+  return new fontColorApi();
 };
