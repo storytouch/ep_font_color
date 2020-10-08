@@ -18,6 +18,8 @@ var authorsColorsUtils = function(context) {
   thisPlugin.api.setHandleToggleAuthorsColors(this.toggleAuthorsColors.bind(this));
   thisPlugin.api.setHandleEditorReconnected(this.getUsersColors.bind(this));
   this.api = thisPlugin.api;
+
+  this.getUsersColors(); // always request user colors when user loads the pad
 }
 
 authorsColorsUtils.prototype.applyColorOnSelection = function(colorName) {
