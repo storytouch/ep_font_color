@@ -4,11 +4,10 @@ var _ = require('ep_etherpad-lite/static/js/underscore');
 var colors = ['black', 'red', 'green', 'blue', 'yellow', 'orange'];
 
 // Add the props to be supported in export
-exports.exportHtmlAdditionalTagsWithData = function(hook, pad, cb){
-  var colors_used = findAllColorUsedOn(pad);
-  var tags = transformColorsIntoTags(colors_used);
-
-  cb(tags);
+exports.exportHtmlAdditionalTagsWithData = async function(hook, pad) {
+  var colorsUsed = findAllColorUsedOn(pad);
+  var tags = transformColorsIntoTags(colorsUsed);
+  return tags;
 };
 
 // Iterate over pad attributes to find only the color ones
